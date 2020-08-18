@@ -4,12 +4,12 @@ import {Observable, of} from 'rxjs';
 import {HttpHeaders} from '@angular/common/http';
 
 @Component({
-  selector: 'app-transcripts',
-  templateUrl: './transcripts.component.html',
-  styleUrls: ['./transcripts.component.css']
+  selector: 'app-transcripts-search',
+  templateUrl: './transcripts-search.component.html',
+  styleUrls: ['./transcripts-search.component.css']
 })
 
-export class TranscriptsComponent implements OnInit {
+export class TranscriptsSearchComponent implements OnInit {
   term = 'blue bird';
   matches = [];
 

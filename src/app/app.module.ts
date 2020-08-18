@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BillsComponent } from './bills/bills.component';
-import { TranscriptsComponent } from './transcripts/transcripts.component';
+import { TranscriptsSearchComponent } from './transcripts/transcripts-search/transcripts-search.component';
 import { LawsComponent } from './laws/laws.component';
 import { CalendarsComponent } from './calendars/calendars.component';
 import { AgendasComponent } from './agendas/agendas.component';
@@ -15,7 +15,7 @@ import { AgendasComponent } from './agendas/agendas.component';
   declarations: [
     AppComponent,
     BillsComponent,
-    TranscriptsComponent,
+    TranscriptsSearchComponent,
     LawsComponent,
     CalendarsComponent,
     AgendasComponent
