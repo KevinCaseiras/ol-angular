@@ -1,42 +1,38 @@
-<section>
-  <nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="">
-        <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-      </a>
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="">
+      <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+    </a>
 
-      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-         data-target="navbarBasicExample">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
+    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+       data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" routerLink="/calendars" routerLinkActive="active">
+        Calendars
+      </a>
+      <a class="navbar-item" routerLink="/agendas" routerLinkActive="active">
+        Agendas
+      </a>
+      <a class="navbar-item" routerLink="/bills" routerLinkActive="active">
+        Bills
+      </a>
+      <a class="navbar-item" routerLink="/laws" routerLinkActive="active">
+        Laws
+      </a>
+      <a class="navbar-item" routerLink="/transcripts" routerLinkActive="active">
+        Transcripts
       </a>
     </div>
-
-    <div id="navbarBasicExample" class="navbar-menu">
-      <div class="navbar-start">
-         <a class="navbar-item" routerLink="/calendars" routerLinkActive="active">
-          Calendars
-        </a>
-        <a class="navbar-item" routerLink="/agendas" routerLinkActive="active">
-          Agendas
-        </a>
-        <a class="navbar-item" routerLink="/bills" routerLinkActive="active">
-          Bills
-        </a>
-        <a class="navbar-item" routerLink="/laws" routerLinkActive="active">
-          Laws
-        </a>
-        <a class="navbar-item" routerLink="/transcripts" routerLinkActive="active">
-          Transcripts
-        </a>
-      </div>
-    </div>
-  </nav>
-</section>
-
-<hr>
-
-<section>
+  </div>
+</nav>
+<hr/>
+<div>
   <router-outlet></router-outlet>
-</section>
+</div>
