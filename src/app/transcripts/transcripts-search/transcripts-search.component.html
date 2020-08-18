@@ -40,10 +40,14 @@
 
 <hr>
 
-<div>
+<div class="container">
   <ul>
     <li *ngFor="let match of matches">
-      {{match.result.dateTime}}
+      <a [routerLink]="['/transcripts/session', match.result.dateTime]"
+        routerLinkActive="active">
+        {{match.result.dateTime}}
+      </a>
+      - {{match.result.sessionType}}
     </li>
   </ul>
 </div>

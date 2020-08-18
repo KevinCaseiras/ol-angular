@@ -10,6 +10,7 @@ import { TranscriptsSearchComponent } from './transcripts/transcripts-search/tra
 import { LawsComponent } from './laws/laws.component';
 import { CalendarsComponent } from './calendars/calendars.component';
 import { AgendasComponent } from './agendas/agendas.component';
+import { TranscriptViewComponent } from './transcripts/transcript-view/transcript-view.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { AgendasComponent } from './agendas/agendas.component';
     TranscriptsSearchComponent,
     LawsComponent,
     CalendarsComponent,
-    AgendasComponent
+    AgendasComponent,
+    TranscriptViewComponent
   ],
   imports: [
     BrowserModule,
