@@ -9,11 +9,11 @@
 </section>
 
 <div class="container">
-  <form (ngSubmit)="search()">
+  <form [formGroup]="searchForm" (ngSubmit)="search()">
     <div class="field">
       <label class="label">Search for transcripts</label>
       <div class="control">
-        <input [(ngModel)]="term" class="input" type="text" name="term"
+        <input formControlName="term" class="input" type="text" name="term"
                placeholder="e.g. &quot;a phrase&quot; or text">
       </div>
     </div>
@@ -22,7 +22,7 @@
       <label class="label">Published Year</label>
       <div class="control">
         <div class="select">
-          <select name="year">
+          <select formControlName="year">
             <option selected>2020</option>
             <option>2019</option>
           </select>

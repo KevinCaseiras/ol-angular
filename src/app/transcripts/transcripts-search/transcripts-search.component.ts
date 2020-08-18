@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import {HttpHeaders} from '@angular/common/http';
+import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-transcripts-search',
@@ -10,8 +10,13 @@ import {HttpHeaders} from '@angular/common/http';
 })
 
 export class TranscriptsSearchComponent implements OnInit {
-  term = 'blue bird';
+  // term = 'blue bird';
   matches = [];
+
+  searchForm = new FormGroup({
+    term: new FormControl(''),
+    year: new FormControl('2020'),
+  });
 
   search(): void {
     this.doSearch().subscribe(
@@ -24,7 +29,7 @@ export class TranscriptsSearchComponent implements OnInit {
   }
 
   doSearch(): Observable<any>{
-    return this.httpClient.get('http://localhost:8080/api/3/transcripts/search?term=' + this.term);
+    return this.httpClient.get('http://localhost:8080/api/3/transcripts/search?term=' + this.searchForm.value.term);
   }
 
   constructor(private httpClient: HttpClient) { }
