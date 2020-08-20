@@ -1,3 +1,6 @@
-<p>transcript-view works!</p>
 
-Displaying transcript {{productId}}
+<h1 style="font-weight: bold;">{{transcript.sessionType}}</h1>
+{{transcript.dateTime | date : 'longDate'}}, {{transcript.location}}
+<pre>
+  {{transcript.text}}
+</pre>

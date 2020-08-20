@@ -23,8 +23,7 @@
       <div class="control">
         <div class="select">
           <select formControlName="year">
-            <option selected>2020</option>
-            <option>2019</option>
+            <option *ngFor="let year of years" [value]="year">{{year}}</option>
           </select>
         </div>
       </div>
@@ -50,4 +49,8 @@
       - {{match.result.sessionType}}
     </li>
   </ul>
+
+  <div [hidden]="matches.length != 0">
+  No transcript results were found.
+  </div>
 </div>

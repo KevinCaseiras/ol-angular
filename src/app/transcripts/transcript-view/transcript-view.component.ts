@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {Observable, of} from 'rxjs';
 
 @Component({
   selector: 'app-transcript-view',
@@ -7,13 +9,22 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./transcript-view.component.css']
 })
 export class TranscriptViewComponent implements OnInit {
-  productId: string;
+  dateTime: string;
+  transcript;
 
-  constructor(private activatedRoute: ActivatedRoute) {
-    this.productId = this.activatedRoute.snapshot.params.dateTime;
+  constructor(private activatedRoute: ActivatedRoute,
+              private httpClient: HttpClient) {
+    this.dateTime = this.activatedRoute.snapshot.params.dateTime;
   }
 
   ngOnInit(): void {
+    console.log('HELLO ANGULAR??');
+    this.httpClient.get<any>('http://localhost:8080/api/3/transcripts/' + this.dateTime).subscribe(
+      res => {
+        this.transcript = res.result;
+        console.log(this.transcript);
+      }
+    );
   }
 
 }
