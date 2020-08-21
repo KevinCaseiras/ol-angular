@@ -1,6 +1,7 @@
-
-<h1 style="font-weight: bold;">{{transcript.sessionType}}</h1>
-{{transcript.dateTime | date : 'longDate'}}, {{transcript.location}}
-<pre>
+<div *ngIf="loading == false">
+  <h1 style="font-weight: bold;">{{transcript.sessionType}}</h1>
+  {{transcript.dateTime | date : 'longDate'}}, {{transcript.location}}
+  <pre>
   {{transcript.text}}
 </pre>
+</div>

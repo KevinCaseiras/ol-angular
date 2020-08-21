@@ -11,6 +11,7 @@ import {Observable, of} from 'rxjs';
 export class TranscriptViewComponent implements OnInit {
   dateTime: string;
   transcript;
+  loading;
 
   constructor(private activatedRoute: ActivatedRoute,
               private httpClient: HttpClient) {
@@ -18,11 +19,12 @@ export class TranscriptViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('HELLO ANGULAR??');
+    this.loading = true;
     this.httpClient.get<any>('http://localhost:8080/api/3/transcripts/' + this.dateTime).subscribe(
       res => {
         this.transcript = res.result;
         console.log(this.transcript);
+        this.loading = false;
       }
     );
   }

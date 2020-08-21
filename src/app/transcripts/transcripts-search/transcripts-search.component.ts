@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Pagination} from '../../pagination';
+import {ActivatedRoute, Router, Params} from '@angular/router';
 
 @Component({
   selector: 'app-transcripts-search',
@@ -17,6 +18,7 @@ export class TranscriptsSearchComponent implements OnInit {
   pagination: Pagination;
 
   search(): void {
+    this.updateQueryParams();
     const term = this.searchForm.value.term || '*';
     const year = this.searchForm.value.year;
     if (this.searchForm.value.year === 'Any') {
@@ -59,18 +61,42 @@ export class TranscriptsSearchComponent implements OnInit {
     this.search();
   }
 
-  constructor(private httpClient: HttpClient) {
+  updateQueryParams(): void {
+    const queryParams: Params = {
+      term: this.searchForm.value.term,
+      year: this.searchForm.value.year,
+      page: this.pagination.currentPage()
+    };
+
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.activatedRoute,
+        queryParams,
+        queryParamsHandling: 'merge',
+      });
+  }
+
+  constructor(private httpClient: HttpClient,
+              private router: Router,
+              private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
     this.years = this.initAvailableYears();
 
+    const termParam: string = this.activatedRoute.snapshot.queryParamMap.get('term') || '';
+    const yearParam: string = this.activatedRoute.snapshot.queryParamMap.get('year') || 'Any';
+    const pageParam: number = +this.activatedRoute.snapshot.queryParamMap.get('page') || 1;
+
     this.searchForm = new FormGroup({
-      term: new FormControl(''),
-      year: new FormControl('Any'),
+      term: new FormControl(termParam),
+      year: new FormControl(yearParam),
     });
 
     this.pagination = new Pagination(25, 1, 25, 100);
+    this.pagination.setPage(pageParam);
+    this.search();
   }
 
   initAvailableYears(): any[] {
