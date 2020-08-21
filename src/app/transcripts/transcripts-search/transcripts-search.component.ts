@@ -3,7 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Pagination} from '../../pagination';
-import {ActivatedRoute, Router, Params} from '@angular/router';
+import {ActivatedRoute, Router, Params, NavigationEnd} from '@angular/router';
+import {filter} from 'rxjs/operators';
 
 @Component({
   selector: 'app-transcripts-search',
@@ -17,14 +18,18 @@ export class TranscriptsSearchComponent implements OnInit {
   searchForm: FormGroup;
   pagination: Pagination;
 
-  search(): void {
+  onSearchClick(): void {
     this.updateQueryParams();
-    const term = this.searchForm.value.term || '*';
+  }
+
+  search(): void {
+    const term = this.searchForm.value.term || '*'; // An empty string should match any string.
     const year = this.searchForm.value.year;
+
+    // The search API we call changes depending on if we are searching a specific year or not.
     if (this.searchForm.value.year === 'Any') {
       this.doSearchAllYears(term).subscribe(
         res => {
-          console.log(res);
           this.handleSearchResponse(res);
         }
       );
@@ -58,7 +63,7 @@ export class TranscriptsSearchComponent implements OnInit {
 
   pageChanged(page): void {
     this.pagination.setPage(page);
-    this.search();
+    this.updateQueryParams();
   }
 
   updateQueryParams(): void {
@@ -85,9 +90,10 @@ export class TranscriptsSearchComponent implements OnInit {
   ngOnInit(): void {
     this.years = this.initAvailableYears();
 
-    const termParam: string = this.activatedRoute.snapshot.queryParamMap.get('term') || '';
-    const yearParam: string = this.activatedRoute.snapshot.queryParamMap.get('year') || 'Any';
-    const pageParam: number = +this.activatedRoute.snapshot.queryParamMap.get('page') || 1;
+    // Set model to initial request param values if given.
+    let termParam: string = this.activatedRoute.snapshot.queryParamMap.get('term') || '';
+    let yearParam: string = this.activatedRoute.snapshot.queryParamMap.get('year') || 'Any';
+    let pageParam: number = +this.activatedRoute.snapshot.queryParamMap.get('page') || 1;
 
     this.searchForm = new FormGroup({
       term: new FormControl(termParam),
@@ -96,7 +102,29 @@ export class TranscriptsSearchComponent implements OnInit {
 
     this.pagination = new Pagination(25, 1, 25, 100);
     this.pagination.setPage(pageParam);
+
+    // Load initial data request.
     this.search();
+
+    // Subscribe to url changes to handle forward/back browser navigation.
+    // This is also triggered whenever the user changes a form field and searches.
+    this.router.events.pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe((e) => {
+        console.log('Route change event');
+        termParam = this.activatedRoute.snapshot.queryParamMap.get('term') || '';
+        yearParam = this.activatedRoute.snapshot.queryParamMap.get('year') || 'Any';
+        pageParam = +this.activatedRoute.snapshot.queryParamMap.get('page') || 1;
+
+        // update model data
+        this.searchForm.setValue({
+          term: termParam,
+          year: yearParam
+        });
+
+        this.pagination.setPage(pageParam);
+
+        this.search();
+      });
   }
 
   initAvailableYears(): any[] {
