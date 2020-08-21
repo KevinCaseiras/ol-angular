@@ -49,9 +49,12 @@
                                                    totalItems: pagination.total}">
       <a [routerLink]="['/transcripts/session', match.result.dateTime]"
          routerLinkActive="active">
-        {{match.result.dateTime}}
+        {{match.result.dateTime | date: 'longDate'}}
       </a>
       - {{match.result.sessionType}}
+      <pre *ngIf="match.highlights.text">
+        <span [innerHtml]="match.highlights.text"></span>
+      </pre>
     </li>
   </ul>
 </div>

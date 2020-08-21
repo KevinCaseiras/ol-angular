@@ -5,7 +5,6 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {Pagination} from '../../pagination';
 import {ActivatedRoute, Router, Params, NavigationEnd} from '@angular/router';
 import {filter} from 'rxjs/operators';
-import {LoadingIndicatorComponent} from '../../loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-transcripts-search',
@@ -33,6 +32,7 @@ export class TranscriptsSearchComponent implements OnInit {
     if (this.searchForm.value.year === 'Any') {
       this.doSearchAllYears(term).subscribe(
         res => {
+          console.log(res);
           this.handleSearchResponse(res);
         }
       );
@@ -63,7 +63,6 @@ export class TranscriptsSearchComponent implements OnInit {
     this.matches = res.result.items;
     this.pagination = new Pagination(res.limit, res.offsetStart, res.offsetEnd, res.total);
     this.loading = false;
-    console.log(this.matches);
   }
 
   pageChanged(page): void {
@@ -98,7 +97,7 @@ export class TranscriptsSearchComponent implements OnInit {
     // Set model to initial request param values if given.
     let termParam: string = this.activatedRoute.snapshot.queryParamMap.get('term') || '';
     let yearParam: string = this.activatedRoute.snapshot.queryParamMap.get('year') || 'Any';
-    let pageParam: number = +this.activatedRoute.snapshot.queryParamMap.get('page') || 1;
+    let pageParam: number = +this.activatedRoute.snapshot.queryParamMap.get('page') || 1; // '+' converts a string to a number
 
     this.searchForm = new FormGroup({
       term: new FormControl(termParam),
@@ -115,7 +114,6 @@ export class TranscriptsSearchComponent implements OnInit {
     // This is also triggered whenever the user changes a form field and searches.
     this.router.events.pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((e) => {
-        console.log('Route change event');
         termParam = this.activatedRoute.snapshot.queryParamMap.get('term') || '';
         yearParam = this.activatedRoute.snapshot.queryParamMap.get('year') || 'Any';
         pageParam = +this.activatedRoute.snapshot.queryParamMap.get('page') || 1;
