@@ -39,18 +39,23 @@
 
 <hr>
 
-<div class="container">
+<div class="container" *ngIf="matches.length != 0">
+  <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
   <ul>
-    <li *ngFor="let match of matches">
+    <li *ngFor="let match of matches | paginate: { itemsPerPage: pagination.limit,
+                                                   currentPage: pagination.currentPage(),
+                                                   totalItems: pagination.total}">
       <a [routerLink]="['/transcripts/session', match.result.dateTime]"
-        routerLinkActive="active">
+         routerLinkActive="active">
         {{match.result.dateTime}}
       </a>
       - {{match.result.sessionType}}
     </li>
   </ul>
+</div>
 
+<div>
   <div [hidden]="matches.length != 0">
-  No transcript results were found.
+    No transcript results were found.
   </div>
 </div>

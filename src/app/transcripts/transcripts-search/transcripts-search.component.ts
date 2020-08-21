@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {FormControl, FormGroup} from '@angular/forms';
+import {Pagination} from '../../pagination';
 
 @Component({
   selector: 'app-transcripts-search',
@@ -10,10 +11,10 @@ import {FormControl, FormGroup} from '@angular/forms';
 })
 
 export class TranscriptsSearchComponent implements OnInit {
-  // term = 'blue bird';
   matches = [];
   years = [];
   searchForm: FormGroup;
+  pagination: Pagination;
 
   search(): void {
     const term = this.searchForm.value.term || '*';
@@ -21,6 +22,7 @@ export class TranscriptsSearchComponent implements OnInit {
     if (this.searchForm.value.year === 'Any') {
       this.doSearchAllYears(term).subscribe(
         res => {
+          console.log(res);
           this.handleSearchResponse(res);
         }
       );
@@ -34,15 +36,27 @@ export class TranscriptsSearchComponent implements OnInit {
   }
 
   doSearchAllYears(term: string): Observable<any> {
-    return this.httpClient.get('http://localhost:8080/api/3/transcripts/search?term=' + term);
+    return this.httpClient.get('http://localhost:8080/api/3/transcripts/search?' +
+      'term=' + term +
+      '&limit=' + this.pagination.limit +
+      '&offset=' + this.pagination.offsetStart);
   }
 
   doSearchSingleYear(term: string, year: number): Observable<any> {
-    return this.httpClient.get('http://localhost:8080/api/3/transcripts/' + year + '/search?term=' + term);
+    return this.httpClient.get('http://localhost:8080/api/3/transcripts/' + year + '/search?' +
+      'term=' + term +
+      '&limit=' + this.pagination.limit +
+      '&offset=' + this.pagination.offsetStart);
   }
 
   handleSearchResponse(res): void {
     this.matches = res.result.items;
+    this.pagination = new Pagination(res.limit, res.offsetStart, res.offsetEnd, res.total);
+  }
+
+  pageChanged(page): void {
+    this.pagination.setPage(page);
+    this.search();
   }
 
   constructor(private httpClient: HttpClient) {
@@ -55,6 +69,8 @@ export class TranscriptsSearchComponent implements OnInit {
       term: new FormControl(''),
       year: new FormControl('Any'),
     });
+
+    this.pagination = new Pagination(25, 1, 25, 100);
   }
 
   initAvailableYears(): any[] {
