@@ -13,6 +13,7 @@ import { LawsComponent } from './laws/laws.component';
 import { CalendarsComponent } from './calendars/calendars.component';
 import { AgendasComponent } from './agendas/agendas.component';
 import { TranscriptViewComponent } from './transcripts/transcript-view/transcript-view.component';
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { TranscriptViewComponent } from './transcripts/transcript-view/transcrip
     LawsComponent,
     CalendarsComponent,
     AgendasComponent,
-    TranscriptViewComponent
+    TranscriptViewComponent,
+    LoadingIndicatorComponent
   ],
   imports: [
     BrowserModule,

@@ -5,6 +5,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {Pagination} from '../../pagination';
 import {ActivatedRoute, Router, Params, NavigationEnd} from '@angular/router';
 import {filter} from 'rxjs/operators';
+import {LoadingIndicatorComponent} from '../../loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-transcripts-search',
@@ -17,12 +18,14 @@ export class TranscriptsSearchComponent implements OnInit {
   years = [];
   searchForm: FormGroup;
   pagination: Pagination;
+  loading;
 
   onSearchClick(): void {
     this.updateQueryParams();
   }
 
   search(): void {
+    this.loading = true;
     const term = this.searchForm.value.term || '*'; // An empty string should match any string.
     const year = this.searchForm.value.year;
 
@@ -59,6 +62,8 @@ export class TranscriptsSearchComponent implements OnInit {
   handleSearchResponse(res): void {
     this.matches = res.result.items;
     this.pagination = new Pagination(res.limit, res.offsetStart, res.offsetEnd, res.total);
+    this.loading = false;
+    console.log(this.matches);
   }
 
   pageChanged(page): void {

@@ -12,7 +12,7 @@ export class Pagination {
   }
 
   currentPage(): number {
-    return (this.offsetEnd / this.limit);
+    return Math.ceil(this.offsetEnd / this.limit);
   }
 
   setPage(page): void {
