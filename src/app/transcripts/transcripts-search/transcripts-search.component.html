@@ -42,7 +42,7 @@
 <app-loading-indicator [hidden]="!loading"></app-loading-indicator>
 
 <div class="container" *ngIf="matches.length != 0 && !loading">
-  <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+  <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
   <ul>
     <li *ngFor="let match of matches | paginate: { itemsPerPage: pagination.limit,
                                                    currentPage: pagination.currentPage(),

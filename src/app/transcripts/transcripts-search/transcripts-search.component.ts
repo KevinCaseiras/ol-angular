@@ -20,6 +20,7 @@ export class TranscriptsSearchComponent implements OnInit {
   loading;
 
   onSearchClick(): void {
+    this.pagination.setPage(1);
     this.updateQueryParams();
   }
 
@@ -65,7 +66,7 @@ export class TranscriptsSearchComponent implements OnInit {
     this.loading = false;
   }
 
-  pageChanged(page): void {
+  onPageChange(page): void {
     this.pagination.setPage(page);
     this.updateQueryParams();
   }
