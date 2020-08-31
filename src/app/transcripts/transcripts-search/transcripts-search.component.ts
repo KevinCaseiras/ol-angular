@@ -13,6 +13,8 @@ import {filter} from 'rxjs/operators';
 })
 
 export class TranscriptsSearchComponent implements OnInit {
+  term = '';
+  year = 'Any';
   matches = [];
   years = [];
   searchForm: FormGroup;
@@ -20,25 +22,24 @@ export class TranscriptsSearchComponent implements OnInit {
   loading;
 
   onSearchClick(): void {
-    this.pagination.setPage(1);
-    this.updateQueryParams();
+    this.updateQueryParams(this.searchForm.value.term, this.searchForm.value.year, 1);
   }
 
   search(): void {
     this.loading = true;
-    const term = this.searchForm.value.term || '*'; // An empty string should match any string.
-    const year = this.searchForm.value.year;
+    this.term = this.searchForm.value.term || '*'; // An empty string should match any string.
+    this.year = this.searchForm.value.year;
 
     // The search API we call changes depending on if we are searching a specific year or not.
     if (this.searchForm.value.year === 'Any') {
-      this.doSearchAllYears(term).subscribe(
+      this.doSearchAllYears(this.term).subscribe(
         res => {
           console.log(res);
           this.handleSearchResponse(res);
         }
       );
     } else {
-      this.doSearchSingleYear(term, year).subscribe(
+      this.doSearchSingleYear(this.term, this.year).subscribe(
         res => {
           this.handleSearchResponse(res);
         }
@@ -53,7 +54,7 @@ export class TranscriptsSearchComponent implements OnInit {
       '&offset=' + this.pagination.offsetStart);
   }
 
-  doSearchSingleYear(term: string, year: number): Observable<any> {
+  doSearchSingleYear(term: string, year): Observable<any> {
     return this.httpClient.get('http://localhost:8080/api/3/transcripts/' + year + '/search?' +
       'term=' + term +
       '&limit=' + this.pagination.limit +
@@ -67,15 +68,12 @@ export class TranscriptsSearchComponent implements OnInit {
   }
 
   onPageChange(page): void {
-    this.pagination.setPage(page);
-    this.updateQueryParams();
+    this.updateQueryParams(this.term, this.year, page);
   }
 
-  updateQueryParams(): void {
+  updateQueryParams(term, year, page): void {
     const queryParams: Params = {
-      term: this.searchForm.value.term,
-      year: this.searchForm.value.year,
-      page: this.pagination.currentPage()
+      term, year, page
     };
 
     this.router.navigate(
@@ -100,6 +98,11 @@ export class TranscriptsSearchComponent implements OnInit {
     let yearParam: string = this.activatedRoute.snapshot.queryParamMap.get('year') || 'Any';
     let pageParam: number = +this.activatedRoute.snapshot.queryParamMap.get('page') || 1; // '+' converts a string to a number
 
+    // Store 'term' and 'year' in 2 places
+    // this.term and this.year are the term and year that match the displayed results.
+    // this.searchForm.(term|year) are the current form values. this.term and this.year are only updated to match these when the search btn is clicked.
+    this.term = termParam;
+    this.year = yearParam;
     this.searchForm = new FormGroup({
       term: new FormControl(termParam),
       year: new FormControl(yearParam),
@@ -120,6 +123,8 @@ export class TranscriptsSearchComponent implements OnInit {
         pageParam = +this.activatedRoute.snapshot.queryParamMap.get('page') || 1;
 
         // update model data
+        this.term = termParam;
+        this.year = yearParam;
         this.searchForm.setValue({
           term: termParam,
           year: yearParam
